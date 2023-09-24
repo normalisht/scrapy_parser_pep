@@ -8,9 +8,7 @@ ROBOTSTXT_OBEY = True
 
 
 # Configure item pipelines
-ITEM_PIPELINES = {
-   'pep_parse.pipelines.PepParsePipeline': 300,
-}
+ITEM_PIPELINES = {'pep_parse.pipelines.PepParsePipeline': 300}
 
 FEEDS = {
     'results/pep_%(time)s.csv': {
