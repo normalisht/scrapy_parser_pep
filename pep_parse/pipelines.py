@@ -1,4 +1,6 @@
+import csv
 import datetime as dt
+from collections import defaultdict
 from os import path
 
 from pep_parse.constants import BASE_DIR
@@ -6,12 +8,10 @@ from pep_parse.constants import BASE_DIR
 
 class PepParsePipeline:
     def open_spider(self, spider):
-        self.status_counter = {}
+        self.status_counter = defaultdict(lambda: 0)
 
     def process_item(self, item, spider):
-        self.status_counter[item['status']] = (
-            self.status_counter.get(item['status'], 0) + 1
-        )
+        self.status_counter[item['status']] += 1
         return item
 
     def close_spider(self, spider):
@@ -22,7 +22,9 @@ class PepParsePipeline:
             )
         )
         with open(filename, mode='w', encoding='utf-8') as f:
-            f.write('Статус,Количество\n')
-            for status, count in self.status_counter.items():
-                f.write(f'{status},{count}\n')
-            f.write(f'Всего,{sum(self.status_counter.values())}')
+            writer = csv.writer(f, dialect=csv.unix_dialect)
+            writer.writerows((
+                ('Статус', 'Количество'),
+                *self.status_counter.items(),
+                ('Всего', sum(self.status_counter.values()))
+            ))

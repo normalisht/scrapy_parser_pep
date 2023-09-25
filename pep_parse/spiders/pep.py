@@ -30,5 +30,7 @@ class PepSpider(scrapy.Spider):
         yield PepParseItem({
             'number': number,
             'name': name,
-            'status': response.css('dl.field-list abbr::text').get()
+            'status': response.css(
+                'dt:contains("Status") + dd abbr::text'
+            ).get()
         })
