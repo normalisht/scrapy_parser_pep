@@ -8,7 +8,7 @@ from pep_parse.constants import BASE_DIR
 
 class PepParsePipeline:
     def open_spider(self, spider):
-        self.status_counter = defaultdict(lambda: 0)
+        self.status_counter = defaultdict(0)
 
     def process_item(self, item, spider):
         self.status_counter[item['status']] += 1
